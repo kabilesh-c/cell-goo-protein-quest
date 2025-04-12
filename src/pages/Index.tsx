@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import NavBar from '@/components/NavBar';
+import LandingPage from '@/components/LandingPage';
 import GooeyButton from '@/components/GooeyButton';
 import DNAModel from '@/components/DNAModel';
 import TranscriptionAnimation from '@/components/TranscriptionAnimation';
@@ -66,51 +66,14 @@ const Index = () => {
     <section 
       id="hero" 
       ref={sections.hero} 
-      className="min-h-screen relative flex flex-col items-center justify-center pt-16 pb-12 overflow-hidden"
+      className="min-h-screen relative"
     >
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-hero-pattern"></div>
         <DNAModel className="opacity-60" />
       </div>
       
-      <GooeyBlob 
-        color="bg-primary/20" 
-        size={400} 
-        top="-5%" 
-        left="-10%" 
-      />
-      <GooeyBlob 
-        color="bg-secondary/20" 
-        size={300} 
-        bottom="10%" 
-        right="-5%" 
-        delay={2}
-      />
-      
-      <motion.div 
-        className="container mx-auto px-4 text-center z-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-          Protein Synthesis
-        </h1>
-        <h2 className="text-xl md:text-2xl lg:text-3xl mb-8 text-white/80">
-          An immersive journey inside your cells
-        </h2>
-        
-        <div className="mt-10">
-          <GooeyButton onClick={handleStartLearning}>
-            Start Learning
-          </GooeyButton>
-        </div>
-        
-        <div className="mt-16 md:mt-24 animate-bounce">
-          <div className="w-6 h-6 mx-auto border-2 border-white/50 border-b-transparent rounded-full animate-spin-slow"></div>
-          <p className="text-white/50 mt-2">Scroll to Explore</p>
-        </div>
-      </motion.div>
+      <LandingPage onStartLearning={handleStartLearning} />
     </section>
   );
   

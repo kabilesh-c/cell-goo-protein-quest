@@ -10,6 +10,9 @@ interface GooeyBlobProps {
   right?: string;
   bottom?: string;
   delay?: number;
+  opacity?: number;
+  blur?: string;
+  animate?: boolean;
 }
 
 const GooeyBlob: React.FC<GooeyBlobProps> = ({
@@ -21,6 +24,9 @@ const GooeyBlob: React.FC<GooeyBlobProps> = ({
   right,
   bottom,
   delay = 0,
+  opacity = 0.7,
+  blur = 'xl',
+  animate = true,
 }) => {
   const animationStyle = {
     animationDelay: `${delay}s`,
@@ -30,12 +36,13 @@ const GooeyBlob: React.FC<GooeyBlobProps> = ({
     left,
     right,
     bottom,
+    opacity,
   };
 
   return (
     <div
-      className={`goo-blob ${color} ${className}`}
-      style={animationStyle}
+      className={`absolute ${color} rounded-full filter blur-${blur} ${animate ? 'animate-blob' : ''} ${className}`}
+      style={{...animationStyle, mixBlendMode: 'screen'}}
     ></div>
   );
 };

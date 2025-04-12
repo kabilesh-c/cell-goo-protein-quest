@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -19,6 +18,12 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        grotesk: ['Space Grotesk', 'sans-serif'],
+        orbitron: ['Orbitron', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -79,8 +84,11 @@ export default {
           to: { height: "0" },
         },
         "float": {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
+          "0%": { transform: "translateY(0) translateX(0)" },
+          "25%": { transform: "translateY(-10px) translateX(10px)" },
+          "50%": { transform: "translateY(-15px) translateX(15px)" },
+          "75%": { transform: "translateY(-5px) translateX(5px)" },
+          "100%": { transform: "translateY(0) translateX(0)" },
         },
         "pulse-glow": {
           "0%, 100%": { 
