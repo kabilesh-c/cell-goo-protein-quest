@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import GooeyBlob from './GooeyBlob';
@@ -68,7 +67,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartLearning }) => {
             }}
           />
         ))}
-        {/* Add some larger DNA-like structures */}
         {Array.from({ length: 8 }).map((_, i) => (
           <div 
             key={i + 20}
@@ -98,7 +96,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartLearning }) => {
           transition={{ duration: 0.8 }}
           className="space-y-8"
         >
-          {/* Heading with futuristic style */}
           <h1 
             className="font-orbitron text-5xl md:text-7xl font-bold mb-4 tracking-tight"
             data-aos="fade-down"
@@ -108,7 +105,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartLearning }) => {
             </span>
           </h1>
           
-          {/* Tagline */}
           <h2 
             className="text-xl md:text-2xl text-white/90 font-light"
             data-aos="fade-up"
@@ -117,7 +113,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartLearning }) => {
             An immersive journey into the molecular machinery of life
           </h2>
           
-          {/* Description paragraph */}
           <div 
             className="mt-8 bg-card/30 backdrop-blur-md border border-primary/10 rounded-xl p-6 shadow-lg max-w-2xl mx-auto"
             data-aos="zoom-in"
@@ -131,18 +126,19 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartLearning }) => {
             </p>
           </div>
           
-          {/* Redesigned CTA Button */}
           <div 
-            className="mt-10"
+            className="mt-12 flex justify-center"
             data-aos="fade-up"
             data-aos-delay="600"
           >
-            <GooeyButton onClick={onStartLearning} className="px-10 py-5 text-lg font-semibold">
+            <GooeyButton 
+              onClick={onStartLearning} 
+              className="py-5 px-10 text-lg font-poppins"
+            >
               Start Learning
             </GooeyButton>
           </div>
           
-          {/* Animated arrow */}
           <div 
             className="mt-16"
             data-aos="fade-up"

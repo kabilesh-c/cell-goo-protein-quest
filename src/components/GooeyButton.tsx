@@ -16,100 +16,65 @@ const GooeyButton: React.FC<GooeyButtonProps> = ({
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    const button = buttonRef.current;
-    if (!button) return;
-
-    // Create SVG filter element for the gooey effect if it doesn't exist
-    if (!document.getElementById('gooey-filter')) {
-      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      svg.setAttribute('style', 'position: absolute; width: 0; height: 0');
-      
-      const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-      
-      const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
-      filter.setAttribute('id', 'gooey-filter');
-      
-      const feGaussianBlur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
-      feGaussianBlur.setAttribute('in', 'SourceGraphic');
-      feGaussianBlur.setAttribute('stdDeviation', '10');
-      feGaussianBlur.setAttribute('result', 'blur');
-      
-      const feColorMatrix = document.createElementNS('http://www.w3.org/2000/svg', 'feColorMatrix');
-      feColorMatrix.setAttribute('in', 'blur');
-      feColorMatrix.setAttribute('mode', 'matrix');
-      feColorMatrix.setAttribute('values', '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9');
-      feColorMatrix.setAttribute('result', 'gooey');
-      
-      const feComposite = document.createElementNS('http://www.w3.org/2000/svg', 'feComposite');
-      feComposite.setAttribute('in', 'SourceGraphic');
-      feComposite.setAttribute('in2', 'gooey');
-      feComposite.setAttribute('operator', 'atop');
-      
-      filter.appendChild(feGaussianBlur);
-      filter.appendChild(feColorMatrix);
-      filter.appendChild(feComposite);
-      defs.appendChild(filter);
-      svg.appendChild(defs);
-      
-      document.body.appendChild(svg);
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Add ripple effect
+    const button = e.currentTarget;
+    const ripple = document.createElement('span');
+    const rect = button.getBoundingClientRect();
+    
+    const size = Math.max(rect.width, rect.height) * 2;
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+    
+    ripple.style.width = ripple.style.height = `${size}px`;
+    ripple.style.left = `${x}px`;
+    ripple.style.top = `${y}px`;
+    ripple.className = 'ripple';
+    
+    // Remove existing ripples
+    const existingRipples = button.getElementsByClassName('ripple');
+    while(existingRipples.length > 0) {
+      existingRipples[0].remove();
     }
-
-    // Create bubble elements within the button
-    const bubblesContainer = document.createElement('span');
-    bubblesContainer.classList.add('bubbles');
-
-    // Create 6 bubbles
-    for (let i = 0; i < 6; i++) {
-      const bubble = document.createElement('span');
-      bubble.classList.add('bubble');
-      
-      // Randomize bubble positions
-      bubble.style.left = `${Math.random() * 100}%`;
-      bubble.style.bottom = `${Math.random() * 50}%`;
-      
-      // Randomize bubble sizes
-      const size = 5 + Math.random() * 10;
-      bubble.style.width = `${size}px`;
-      bubble.style.height = `${size}px`;
-      
-      // Randomize animation delay
-      bubble.style.animationDelay = `${Math.random() * 2}s`;
-      
-      bubblesContainer.appendChild(bubble);
-    }
-
-    button.classList.add('gooey-button');
-    button.appendChild(bubblesContainer);
-
-    return () => {
-      if (button.contains(bubblesContainer)) {
-        button.removeChild(bubblesContainer);
+    
+    button.appendChild(ripple);
+    
+    // Trigger the custom onClick handler
+    if (onClick) onClick();
+    
+    // Remove ripple after animation completes
+    setTimeout(() => {
+      if (ripple.parentNode === button) {
+        button.removeChild(ripple);
       }
-    };
-  }, []);
+    }, 600);
+  };
 
   return (
     <button
       ref={buttonRef}
-      onClick={onClick}
+      onClick={handleClick}
       className={cn(
-        'relative overflow-hidden px-8 py-4 rounded-full',
-        'bg-gradient-to-r from-violet-600 to-cyan-400',
-        'text-white font-medium shadow-lg hover:shadow-xl',
-        'transform transition-all duration-300 hover:scale-105',
-        'flex items-center gap-2 border border-violet-400/30',
-        'group',
+        'relative overflow-hidden px-8 py-4 rounded-xl',
+        'bg-gradient-to-r from-blue-500 to-violet-600',
+        'text-white font-bold font-poppins',
+        'shadow-[0_0_15px_rgba(56,189,248,0.5)]',
+        'border border-blue-400/20',
+        'transform transition-all duration-300',
+        'hover:shadow-[0_0_25px_rgba(124,58,237,0.7)]',
+        'hover:scale-[1.02] active:scale-95',
+        'flex items-center justify-center gap-2',
+        'group animate-pulse-glow',
         className
       )}
     >
-      <span className="flex items-center justify-center bg-white/20 rounded-full p-1 
-        transform transition-all duration-300 group-hover:bg-white/30 group-hover:rotate-45">
+      <span className="flex items-center justify-center bg-white/10 rounded-full p-1.5 
+        transform transition-all duration-300 group-hover:bg-white/20">
         <Play className="h-4 w-4" />
       </span>
-      {children}
-      <span className="absolute inset-0 bg-gradient-to-r from-purple-600/40 via-transparent to-cyan-400/40 
-        opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></span>
+      <span className="tracking-wide">{children}</span>
+      <span className="absolute inset-0 bg-gradient-to-r from-blue-600/30 via-transparent to-violet-600/30 
+        opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
     </button>
   );
 };

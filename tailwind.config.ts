@@ -91,13 +91,14 @@ export default {
           "100%": { transform: "translateY(0) translateX(0)" },
         },
         "pulse-glow": {
-          "0%, 100%": { 
-            opacity: "1",
-            filter: "brightness(1)",
+          "0%": { 
+            boxShadow: "0 0 15px rgba(56, 189, 248, 0.5)",
           },
           "50%": { 
-            opacity: "0.8",
-            filter: "brightness(1.2)",
+            boxShadow: "0 0 20px rgba(124, 58, 237, 0.6)",
+          },
+          "100%": { 
+            boxShadow: "0 0 15px rgba(56, 189, 248, 0.5)",
           },
         },
         "spin-slow": {
