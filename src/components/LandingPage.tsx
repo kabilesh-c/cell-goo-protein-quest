@@ -131,18 +131,18 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartLearning }) => {
             </p>
           </div>
           
-          {/* CTA Button */}
+          {/* Redesigned CTA Button */}
           <div 
             className="mt-10"
             data-aos="fade-up"
             data-aos-delay="600"
           >
-            <GooeyButton onClick={onStartLearning} className="px-8 py-4 text-lg">
+            <GooeyButton onClick={onStartLearning} className="px-10 py-5 text-lg font-semibold">
               Start Learning
             </GooeyButton>
           </div>
           
-          {/* Replace scroll indicator with animated arrow */}
+          {/* Animated arrow */}
           <div 
             className="mt-16"
             data-aos="fade-up"

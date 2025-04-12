@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { Play } from 'lucide-react';
 
 interface GooeyButtonProps {
   onClick?: () => void;
@@ -93,12 +94,22 @@ const GooeyButton: React.FC<GooeyButtonProps> = ({
       ref={buttonRef}
       onClick={onClick}
       className={cn(
-        'relative overflow-hidden px-6 py-3 rounded-full bg-gradient-to-r from-primary to-secondary',
-        'text-white font-medium shadow-lg hover:shadow-xl hover:scale-105 transform transition-all duration-300',
+        'relative overflow-hidden px-8 py-4 rounded-full',
+        'bg-gradient-to-r from-violet-600 to-cyan-400',
+        'text-white font-medium shadow-lg hover:shadow-xl',
+        'transform transition-all duration-300 hover:scale-105',
+        'flex items-center gap-2 border border-violet-400/30',
+        'group',
         className
       )}
     >
+      <span className="flex items-center justify-center bg-white/20 rounded-full p-1 
+        transform transition-all duration-300 group-hover:bg-white/30 group-hover:rotate-45">
+        <Play className="h-4 w-4" />
+      </span>
       {children}
+      <span className="absolute inset-0 bg-gradient-to-r from-purple-600/40 via-transparent to-cyan-400/40 
+        opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"></span>
     </button>
   );
 };
