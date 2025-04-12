@@ -23,9 +23,9 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartLearning }) => {
       {/* Background elements */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background via-background/95 to-background/90"></div>
       
-      {/* Gooey blobs for visual interest */}
+      {/* Colorful gooey blobs for visual interest */}
       <GooeyBlob 
-        color="bg-primary/20" 
+        color="bg-purple-500/30" 
         size={500} 
         top="-10%" 
         left="-5%" 
@@ -33,7 +33,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartLearning }) => {
         blur="2xl"
       />
       <GooeyBlob 
-        color="bg-secondary/20" 
+        color="bg-cyan-500/30" 
         size={400} 
         bottom="-5%" 
         right="-5%" 
@@ -41,7 +41,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartLearning }) => {
         blur="2xl"
       />
       <GooeyBlob 
-        color="bg-accent/20" 
+        color="bg-pink-500/30" 
         size={250} 
         top="30%" 
         right="10%" 
@@ -50,20 +50,41 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartLearning }) => {
         opacity={0.5}
       />
       
-      {/* Floating particles */}
+      {/* Floating DNA particles */}
       <div className="particle-container absolute inset-0 -z-5">
-        {Array.from({ length: 30 }).map((_, i) => (
+        {Array.from({ length: 20 }).map((_, i) => (
           <div 
             key={i}
-            className="particle absolute bg-white/20 rounded-full"
+            className="particle absolute rounded-full"
             style={{
-              width: `${Math.random() * 5 + 2}px`,
-              height: `${Math.random() * 5 + 2}px`,
+              width: `${Math.random() * 8 + 3}px`,
+              height: `${Math.random() * 8 + 3}px`,
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
               animation: `float ${Math.random() * 10 + 10}s linear infinite`,
               animationDelay: `${Math.random() * 5}s`,
-              opacity: Math.random() * 0.5 + 0.2,
+              opacity: Math.random() * 0.5 + 0.3,
+              background: `hsl(${Math.random() * 60 + 220}, 80%, 70%)`, // Blue-purple range
+            }}
+          />
+        ))}
+        {/* Add some larger DNA-like structures */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div 
+            key={i + 20}
+            className="dna-helix absolute"
+            style={{
+              width: `${Math.random() * 20 + 10}px`,
+              height: `${Math.random() * 40 + 20}px`,
+              borderRadius: '40%',
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animation: `float ${Math.random() * 15 + 15}s linear infinite, pulse-glow 3s infinite alternate`,
+              animationDelay: `${Math.random() * 7}s`,
+              opacity: Math.random() * 0.4 + 0.2,
+              background: `linear-gradient(135deg, hsla(${Math.random() * 60 + 220}, 80%, 65%, 0.5), hsla(${Math.random() * 60 + 280}, 90%, 75%, 0.3))`,
+              boxShadow: `0 0 15px hsla(${Math.random() * 60 + 240}, 90%, 70%, 0.4)`,
+              transform: `rotate(${Math.random() * 180}deg)`,
             }}
           />
         ))}
@@ -121,14 +142,36 @@ const LandingPage: React.FC<LandingPageProps> = ({ onStartLearning }) => {
             </GooeyButton>
           </div>
           
-          {/* Scroll indicator */}
+          {/* Replace scroll indicator with animated arrow */}
           <div 
-            className="mt-16 animate-bounce"
+            className="mt-16"
             data-aos="fade-up"
             data-aos-delay="800"
           >
-            <div className="w-6 h-6 mx-auto border-2 border-white/50 border-b-transparent rounded-full animate-spin-slow"></div>
-            <p className="text-white/50 mt-2 text-sm">Scroll to Explore</p>
+            <div className="flex flex-col items-center">
+              <motion.div
+                animate={{ y: [0, 10, 0] }}
+                transition={{ 
+                  repeat: Infinity, 
+                  duration: 2.5,
+                  ease: "easeInOut"
+                }}
+                className="relative"
+              >
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-secondary">
+                  <path 
+                    d="M12 4V20M12 20L18 14M12 20L6 14" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                    className="glow-effect"
+                  />
+                </svg>
+                <div className="absolute inset-0 bg-secondary/20 blur-md rounded-full -z-10"></div>
+              </motion.div>
+              <span className="mt-2 text-secondary text-sm font-medium uppercase tracking-widest">Begin Journey</span>
+            </div>
           </div>
         </motion.div>
       </div>

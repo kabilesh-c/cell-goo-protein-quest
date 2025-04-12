@@ -39,10 +39,16 @@ const GooeyBlob: React.FC<GooeyBlobProps> = ({
     opacity,
   };
 
+  // Add a subtle gradient effect to the blob
+  const gradientStyle = {
+    background: `radial-gradient(circle at 30% 30%, ${color}, transparent 70%)`,
+    ...animationStyle,
+  };
+
   return (
     <div
-      className={`absolute ${color} rounded-full filter blur-${blur} ${animate ? 'animate-blob' : ''} ${className}`}
-      style={{...animationStyle, mixBlendMode: 'screen'}}
+      className={`absolute rounded-full filter blur-${blur} ${animate ? 'animate-blob' : ''} ${className}`}
+      style={{...gradientStyle, mixBlendMode: 'screen'}}
     ></div>
   );
 };
