@@ -4,7 +4,7 @@ import NavBar from '@/components/NavBar';
 import LandingPage from '@/components/LandingPage';
 import GooeyButton from '@/components/GooeyButton';
 import DNAModel from '@/components/DNAModel';
-import TranscriptionAnimation from '@/components/TranscriptionAnimation';
+import TranscriptionAnimation2D from '@/components/TranscriptionAnimation2D';
 import TranslationAnimation from '@/components/TranslationAnimation';
 import ProteinFoldingAnimation from '@/components/ProteinFoldingAnimation';
 import VideoCard from '@/components/VideoCard';
@@ -176,7 +176,7 @@ const Index = () => {
               </p>
               
               <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
-                <TranscriptionAnimation isActive={activeSection === 'transcription'} className="absolute inset-0" />
+                <TranscriptionAnimation2D isActive={activeSection === 'transcription'} className="absolute inset-0" />
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
