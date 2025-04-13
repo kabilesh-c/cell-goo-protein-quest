@@ -170,6 +170,33 @@
       box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
     }
   }
+
+  @keyframes typing-dot {
+    0%, 60%, 100% {
+      transform: translateY(0);
+    }
+    30% {
+      transform: translateY(-5px);
+    }
+  }
+
+  .typing-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+    opacity: 0.6;
+    animation: typing-dot 1.5s infinite;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
 }
 
 ::-webkit-scrollbar {
