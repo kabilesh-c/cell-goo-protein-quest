@@ -1,15 +1,14 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import NavBar from '@/components/NavBar';
 import LandingPage from '@/components/LandingPage';
 import GooeyButton from '@/components/GooeyButton';
 import DNAModel from '@/components/DNAModel';
-import TranscriptionAnimation2D from '@/components/TranscriptionAnimation2D';
-import TranslationAnimation from '@/components/TranslationAnimation';
-import ProteinFoldingAnimation from '@/components/ProteinFoldingAnimation';
 import VideoCard from '@/components/VideoCard';
 import SectionDivider from '@/components/SectionDivider';
 import GooeyBlob from '@/components/GooeyBlob';
+import CustomVideoPlayer from '@/components/CustomVideoPlayer';
 import { useToast } from '@/components/ui/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -107,6 +106,13 @@ const Index = () => {
                 muscles to fighting infections.
               </p>
               
+              <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
+                <CustomVideoPlayer 
+                  videoUrl="https://drive.google.com/uc?export=preview&id=1C501Eon88hHX9NQy8YylNVv8eTJyEqpo" 
+                  className="absolute inset-0"
+                />
+              </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
                 <div className="bg-muted/30 rounded-lg p-5 backdrop-blur-sm border border-primary/10">
                   <h3 className="text-lg font-bold text-white mb-3">DNA: The Blueprint</h3>
@@ -176,7 +182,10 @@ const Index = () => {
               </p>
               
               <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
-                <TranscriptionAnimation2D isActive={activeSection === 'transcription'} className="absolute inset-0" />
+                <CustomVideoPlayer 
+                  videoUrl="https://drive.google.com/uc?export=preview&id=12eIxCY21GCnQUBkMK3VVUS1xznGBbGKv" 
+                  className="absolute inset-0"
+                />
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
@@ -260,7 +269,10 @@ const Index = () => {
               </p>
               
               <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
-                <TranslationAnimation isActive={activeSection === 'translation'} className="absolute inset-0" />
+                <CustomVideoPlayer 
+                  videoUrl="https://drive.google.com/uc?export=preview&id=1iY3mgb8A21gmJjgelbHsJLY17DTgDj23" 
+                  className="absolute inset-0"
+                />
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
@@ -340,7 +352,10 @@ const Index = () => {
               </p>
               
               <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
-                <ProteinFoldingAnimation isActive={activeSection === 'folding'} className="absolute inset-0" />
+                <CustomVideoPlayer 
+                  videoUrl="https://drive.google.com/uc?export=preview&id=15wMJptJ9AeEfnbvjzl54COHrn-zCtE2_" 
+                  className="absolute inset-0"
+                />
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
