@@ -19,6 +19,7 @@ const NavBar: React.FC<NavBarProps> = ({ activeSection, onSectionChange }) => {
     { id: 'translation', label: 'Translation' },
     { id: 'folding', label: 'Folding' },
     { id: 'videos', label: 'Videos' },
+    { id: 'quiz', label: 'Quiz', isExternalPage: true, path: '/quiz' },
   ];
 
   useEffect(() => {
@@ -30,13 +31,19 @@ const NavBar: React.FC<NavBarProps> = ({ activeSection, onSectionChange }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (sectionId: string) => {
-    onSectionChange(sectionId);
-    setIsMobileMenuOpen(false);
-    
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const handleNavClick = (item: typeof navItems[0]) => {
+    if (item.isExternalPage) {
+      // Navigate to external page
+      window.location.href = item.path;
+    } else {
+      // Navigate to section
+      onSectionChange(item.id);
+      setIsMobileMenuOpen(false);
+      
+      const element = document.getElementById(item.id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
@@ -62,10 +69,10 @@ const NavBar: React.FC<NavBarProps> = ({ activeSection, onSectionChange }) => {
           {navItems.map((item) => (
             <button
               key={item.id}
-              onClick={() => handleNavClick(item.id)}
+              onClick={() => handleNavClick(item)}
               className={cn(
                 'nav-link',
-                activeSection === item.id && 'active'
+                (activeSection === item.id || (window.location.pathname === item.path && item.isExternalPage)) && 'active'
               )}
             >
               {item.label}
@@ -93,10 +100,10 @@ const NavBar: React.FC<NavBarProps> = ({ activeSection, onSectionChange }) => {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                onClick={() => handleNavClick(item)}
                 className={cn(
                   'py-2 px-4 text-left rounded-md transition-colors',
-                  activeSection === item.id
+                  (activeSection === item.id || (window.location.pathname === item.path && item.isExternalPage))
                     ? 'bg-primary/20 text-white'
                     : 'text-muted-foreground hover:bg-primary/10 hover:text-white'
                 )}
