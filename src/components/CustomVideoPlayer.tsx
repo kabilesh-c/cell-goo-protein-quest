@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, Loader } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Loader, Maximize } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface CustomVideoPlayerProps {
@@ -20,6 +20,22 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({
   const [isMuted, setIsMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Extract Google Drive file ID from URL if present
+  const getProperVideoUrl = (url: string): string => {
+    // Check if it's a Google Drive URL
+    if (url.includes('drive.google.com')) {
+      // Extract the file ID
+      const fileIdMatch = url.match(/id=([^&]+)/);
+      if (fileIdMatch && fileIdMatch[1]) {
+        const fileId = fileIdMatch[1];
+        // Direct download link format
+        return `https://drive.google.com/uc?export=download&id=${fileId}`;
+      }
+    }
+    return url;
+  };
 
   // Initialize video
   useEffect(() => {
@@ -40,13 +56,16 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({
     video.addEventListener('timeupdate', handleTimeUpdate);
     video.addEventListener('ended', handleEnded);
 
+    // Set proper video source
+    video.src = getProperVideoUrl(videoUrl);
+
     return () => {
       // Remove event listeners on cleanup
       video.removeEventListener('canplay', handleCanPlay);
       video.removeEventListener('timeupdate', handleTimeUpdate);
       video.removeEventListener('ended', handleEnded);
     };
-  }, []);
+  }, [videoUrl]);
 
   // Handle auto play when component mounts
   useEffect(() => {
@@ -89,16 +108,34 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({
     video.currentTime = clickPosition * video.duration;
   };
 
+  const toggleFullscreen = () => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(err => {
+        console.error("Error exiting fullscreen:", err);
+      });
+    } else {
+      container.requestFullscreen().catch(err => {
+        console.error("Error entering fullscreen:", err);
+      });
+    }
+  };
+
   return (
-    <div className={cn('relative w-full h-full rounded-lg overflow-hidden group', className)}>
+    <div 
+      ref={containerRef}
+      className={cn('relative w-full h-full rounded-lg overflow-hidden group', className)}
+    >
       {/* Video */}
       <video 
         ref={videoRef}
-        src={videoUrl}
         className="w-full h-full object-cover"
         playsInline
         muted={isMuted}
         preload="metadata"
+        controlsList="nodownload"
       />
       
       {/* Loading overlay */}
@@ -135,16 +172,26 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({
             }
           </button>
           
-          <button 
-            onClick={toggleMute}
-            className="rounded-full bg-primary/20 backdrop-blur-md p-2 hover:bg-primary/40 transition-colors"
-            aria-label={isMuted ? "Unmute" : "Mute"}
-          >
-            {isMuted 
-              ? <VolumeX className="w-5 h-5 text-white" /> 
-              : <Volume2 className="w-5 h-5 text-white" />
-            }
-          </button>
+          <div className="flex items-center space-x-2">
+            <button 
+              onClick={toggleMute}
+              className="rounded-full bg-primary/20 backdrop-blur-md p-2 hover:bg-primary/40 transition-colors"
+              aria-label={isMuted ? "Unmute" : "Mute"}
+            >
+              {isMuted 
+                ? <VolumeX className="w-5 h-5 text-white" /> 
+                : <Volume2 className="w-5 h-5 text-white" />
+              }
+            </button>
+            
+            <button 
+              onClick={toggleFullscreen}
+              className="rounded-full bg-primary/20 backdrop-blur-md p-2 hover:bg-primary/40 transition-colors"
+              aria-label="Fullscreen"
+            >
+              <Maximize className="w-5 h-5 text-white" />
+            </button>
+          </div>
         </div>
       </div>
       
