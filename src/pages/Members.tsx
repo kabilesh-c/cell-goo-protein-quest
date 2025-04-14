@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import NavBar from '@/components/NavBar';
 import MemberCard from '@/components/MemberCard';
