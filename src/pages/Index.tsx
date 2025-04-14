@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import NavBar from '@/components/NavBar';
@@ -105,11 +106,10 @@ const Index = () => {
                 muscles to fighting infections.
               </p>
               
-              <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden">
+              <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
                 <CustomVideoPlayer 
-                  videoUrl="https://drive.google.com/file/d/1C501Eon88hHX9NQy8YylNVv8eTJyEqpo/view?usp=sharing" 
+                  videoUrl="https://drive.google.com/uc?export=preview&id=1C501Eon88hHX9NQy8YylNVv8eTJyEqpo" 
                   className="absolute inset-0"
-                  title="Introduction to Protein Synthesis"
                 />
               </div>
               
@@ -181,11 +181,10 @@ const Index = () => {
                 where the DNA containing the gene for a specific protein is located.
               </p>
               
-              <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden">
+              <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
                 <CustomVideoPlayer 
-                  videoUrl="https://drive.google.com/file/d/12eIxCY21GCnQUBkMK3VVUS1xznGBbGKv/view?usp=sharing" 
+                  videoUrl="https://drive.google.com/uc?export=preview&id=12eIxCY21GCnQUBkMK3VVUS1xznGBbGKv" 
                   className="absolute inset-0"
-                  title="The Transcription Process"
                 />
               </div>
               
@@ -269,11 +268,10 @@ const Index = () => {
                 cytoplasm of the cell, specifically at ribosomes, which serve as protein factories.
               </p>
               
-              <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden">
+              <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
                 <CustomVideoPlayer 
-                  videoUrl="https://drive.google.com/file/d/1iY3mgb8A21gmJjgelbHsJLY17DTgDj23/view?usp=sharing" 
+                  videoUrl="https://drive.google.com/uc?export=preview&id=1iY3mgb8A21gmJjgelbHsJLY17DTgDj23" 
                   className="absolute inset-0"
-                  title="The Translation Process"
                 />
               </div>
               
@@ -353,11 +351,10 @@ const Index = () => {
                 proteins can lead to diseases.
               </p>
               
-              <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden">
+              <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
                 <CustomVideoPlayer 
-                  videoUrl="https://drive.google.com/file/d/15wMJptJ9AeEfnbvjzl54COHrn-zCtE2_/view?usp=sharing" 
+                  videoUrl="https://drive.google.com/uc?export=preview&id=15wMJptJ9AeEfnbvjzl54COHrn-zCtE2_" 
                   className="absolute inset-0"
-                  title="Protein Folding Process"
                 />
               </div>
               
