@@ -22,10 +22,20 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({
   const progressBarRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Extract Google Drive file ID from URL if present
+  // Process video URL based on source
   const getProperVideoUrl = (url: string): string => {
-    // Check if it's a Google Drive URL
-    if (url.includes('drive.google.com')) {
+    // Check if it's a Streamable URL
+    if (url.includes('streamable.com')) {
+      // Extract the streamable ID
+      const streamableId = url.split('/').pop();
+      if (streamableId) {
+        // Return the direct video URL from streamable
+        return `https://streamable.com/e/${streamableId}`;
+      }
+    }
+    
+    // If it's a Google Drive URL
+    else if (url.includes('drive.google.com')) {
       // Extract the file ID
       const fileIdMatch = url.match(/id=([^&]+)/);
       if (fileIdMatch && fileIdMatch[1]) {
@@ -34,6 +44,7 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({
         return `https://drive.google.com/uc?export=download&id=${fileId}`;
       }
     }
+    
     return url;
   };
 
@@ -123,88 +134,104 @@ const CustomVideoPlayer: React.FC<CustomVideoPlayerProps> = ({
     }
   };
 
+  // Check if the URL is for Streamable to use iframe instead of video element
+  const isStreamable = videoUrl.includes('streamable.com');
+
   return (
     <div 
       ref={containerRef}
       className={cn('relative w-full h-full rounded-lg overflow-hidden group', className)}
     >
-      {/* Video */}
-      <video 
-        ref={videoRef}
-        className="w-full h-full object-cover"
-        playsInline
-        muted={isMuted}
-        preload="metadata"
-        controlsList="nodownload"
-      />
-      
-      {/* Loading overlay */}
-      {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-          <Loader className="w-10 h-10 text-primary animate-spin" />
-        </div>
-      )}
-      
-      {/* Controls overlay - appears on hover */}
-      <div className="absolute inset-0 transition-opacity opacity-0 group-hover:opacity-100 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end">
-        {/* Progress bar */}
-        <div 
-          ref={progressBarRef}
-          className="w-full h-2 bg-gray-700/50 cursor-pointer"
-          onClick={handleProgressBarClick}
-        >
-          <div 
-            className="h-full bg-primary transition-all"
-            style={{ width: `${progress}%` }}
+      {isStreamable ? (
+        <iframe 
+          src={getProperVideoUrl(videoUrl)} 
+          className="w-full h-full"
+          allowFullScreen
+          frameBorder="0"
+          title="Streamable video player"
+          allow="autoplay; fullscreen"
+        />
+      ) : (
+        <>
+          {/* Video */}
+          <video 
+            ref={videoRef}
+            className="w-full h-full object-cover"
+            playsInline
+            muted={isMuted}
+            preload="metadata"
+            controlsList="nodownload"
           />
-        </div>
-        
-        {/* Controls */}
-        <div className="w-full flex items-center justify-between px-4 py-3">
-          <button 
-            onClick={togglePlay}
-            className="rounded-full bg-primary/20 backdrop-blur-md p-2 hover:bg-primary/40 transition-colors"
-            aria-label={isPlaying ? "Pause" : "Play"}
-          >
-            {isPlaying 
-              ? <Pause className="w-5 h-5 text-white" /> 
-              : <Play className="w-5 h-5 text-white ml-0.5" />
-            }
-          </button>
           
-          <div className="flex items-center space-x-2">
-            <button 
-              onClick={toggleMute}
-              className="rounded-full bg-primary/20 backdrop-blur-md p-2 hover:bg-primary/40 transition-colors"
-              aria-label={isMuted ? "Unmute" : "Mute"}
+          {/* Loading overlay */}
+          {loading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+              <Loader className="w-10 h-10 text-primary animate-spin" />
+            </div>
+          )}
+          
+          {/* Controls overlay - appears on hover */}
+          <div className="absolute inset-0 transition-opacity opacity-0 group-hover:opacity-100 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end">
+            {/* Progress bar */}
+            <div 
+              ref={progressBarRef}
+              className="w-full h-2 bg-gray-700/50 cursor-pointer"
+              onClick={handleProgressBarClick}
             >
-              {isMuted 
-                ? <VolumeX className="w-5 h-5 text-white" /> 
-                : <Volume2 className="w-5 h-5 text-white" />
-              }
-            </button>
+              <div 
+                className="h-full bg-primary transition-all"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
             
-            <button 
-              onClick={toggleFullscreen}
-              className="rounded-full bg-primary/20 backdrop-blur-md p-2 hover:bg-primary/40 transition-colors"
-              aria-label="Fullscreen"
+            {/* Controls */}
+            <div className="w-full flex items-center justify-between px-4 py-3">
+              <button 
+                onClick={togglePlay}
+                className="rounded-full bg-primary/20 backdrop-blur-md p-2 hover:bg-primary/40 transition-colors"
+                aria-label={isPlaying ? "Pause" : "Play"}
+              >
+                {isPlaying 
+                  ? <Pause className="w-5 h-5 text-white" /> 
+                  : <Play className="w-5 h-5 text-white ml-0.5" />
+                }
+              </button>
+              
+              <div className="flex items-center space-x-2">
+                <button 
+                  onClick={toggleMute}
+                  className="rounded-full bg-primary/20 backdrop-blur-md p-2 hover:bg-primary/40 transition-colors"
+                  aria-label={isMuted ? "Unmute" : "Mute"}
+                >
+                  {isMuted 
+                    ? <VolumeX className="w-5 h-5 text-white" /> 
+                    : <Volume2 className="w-5 h-5 text-white" />
+                  }
+                </button>
+                
+                <button 
+                  onClick={toggleFullscreen}
+                  className="rounded-full bg-primary/20 backdrop-blur-md p-2 hover:bg-primary/40 transition-colors"
+                  aria-label="Fullscreen"
+                >
+                  <Maximize className="w-5 h-5 text-white" />
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          {/* Play overlay when video is paused */}
+          {!isPlaying && !loading && (
+            <div 
+              className="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer"
+              onClick={togglePlay}
             >
-              <Maximize className="w-5 h-5 text-white" />
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      {/* Play overlay when video is paused */}
-      {!isPlaying && !loading && (
-        <div 
-          className="absolute inset-0 flex items-center justify-center bg-black/30 cursor-pointer"
-          onClick={togglePlay}
-        >
-          <div className="rounded-full bg-primary/20 backdrop-blur-md p-4 hover:bg-primary/40 transition-transform hover:scale-110">
-            <Play className="w-10 h-10 text-white ml-1" />
-          </div>
-        </div>
+              <div className="rounded-full bg-primary/20 backdrop-blur-md p-4 hover:bg-primary/40 transition-transform hover:scale-110">
+                <Play className="w-10 h-10 text-white ml-1" />
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

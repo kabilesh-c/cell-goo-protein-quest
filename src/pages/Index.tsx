@@ -108,7 +108,7 @@ const Index = () => {
               
               <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
                 <CustomVideoPlayer 
-                  videoUrl="https://drive.google.com/uc?export=preview&id=1C501Eon88hHX9NQy8YylNVv8eTJyEqpo" 
+                  videoUrl="https://streamable.com/18fo4y" 
                   className="absolute inset-0"
                 />
               </div>
@@ -183,7 +183,7 @@ const Index = () => {
               
               <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
                 <CustomVideoPlayer 
-                  videoUrl="https://drive.google.com/uc?export=preview&id=12eIxCY21GCnQUBkMK3VVUS1xznGBbGKv" 
+                  videoUrl="https://streamable.com/rn1a3j" 
                   className="absolute inset-0"
                 />
               </div>
@@ -270,7 +270,7 @@ const Index = () => {
               
               <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
                 <CustomVideoPlayer 
-                  videoUrl="https://drive.google.com/uc?export=preview&id=1iY3mgb8A21gmJjgelbHsJLY17DTgDj23" 
+                  videoUrl="https://streamable.com/21kuy8" 
                   className="absolute inset-0"
                 />
               </div>
@@ -353,7 +353,7 @@ const Index = () => {
               
               <div className="h-80 sm:h-96 md:h-[28rem] w-full relative rounded-lg overflow-hidden border border-primary/10">
                 <CustomVideoPlayer 
-                  videoUrl="https://drive.google.com/uc?export=preview&id=15wMJptJ9AeEfnbvjzl54COHrn-zCtE2_" 
+                  videoUrl="https://streamable.com/7k4j2k" 
                   className="absolute inset-0"
                 />
               </div>
