@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import NavBar from '@/components/NavBar';
 import LandingPage from '@/components/LandingPage';
 import GooeyButton from '@/components/GooeyButton';
@@ -16,6 +16,7 @@ const Index = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const isMobile = useIsMobile();
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const sections = {
     hero: useRef<HTMLDivElement>(null),
@@ -59,6 +60,10 @@ const Index = () => {
       title: "Let's learn about Protein Synthesis!",
       description: "Scroll through the sections to learn step by step.",
     });
+  };
+  
+  const handleTakeQuiz = () => {
+    navigate('/quiz');
   };
   
   const renderHeroSection = () => (
@@ -510,13 +515,14 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="text-center mt-16">
+          <div className="text-center mt-12">
+            <p className="text-xl text-white font-medium mb-4 animate-pulse">
+              Wanna test your knowledge on protein synthesis?
+            </p>
             <GooeyButton
-              onClick={() => {
-                sections.hero.current?.scrollIntoView({ behavior: 'smooth' });
-              }}
+              onClick={handleTakeQuiz}
             >
-              Back to Top
+              Take Quiz
             </GooeyButton>
           </div>
         </div>

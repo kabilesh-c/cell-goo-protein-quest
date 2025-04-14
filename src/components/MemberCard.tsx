@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from '@/lib/utils';
-import { Dna, Microscope, Sun, Waves, Sparkles, Flask } from 'lucide-react';
+import { Dna, Microscope, Sun, Waves, Sparkles } from 'lucide-react';
 
 interface MemberCardProps {
   memberNumber: number;
@@ -18,7 +18,7 @@ const memberIcons = [
   <Dna className="h-6 w-6 text-primary" />,
   <Sparkles className="h-6 w-6 text-accent" />,
   <Sun className="h-6 w-6 text-yellow-400" />,
-  <Flask className="h-6 w-6 text-green-400" />,
+  <Microscope className="h-6 w-6 text-green-400" />,
 ];
 
 const MemberCard: React.FC<MemberCardProps> = ({ 
