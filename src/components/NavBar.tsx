@@ -20,6 +20,7 @@ const NavBar: React.FC<NavBarProps> = ({ activeSection, onSectionChange }) => {
     { id: 'folding', label: 'Folding' },
     { id: 'videos', label: 'Videos' },
     { id: 'quiz', label: 'Quiz', isExternalPage: true, path: '/quiz' },
+    { id: 'members', label: 'Members', isExternalPage: true, path: '/members' },
   ];
 
   useEffect(() => {
