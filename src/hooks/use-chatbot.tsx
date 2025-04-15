@@ -15,9 +15,32 @@ export const useChatBot = () => {
   const [apiKey, setApiKey] = useState<string>('');
 
   // Speech recognition setup
-  const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-  recognition.continuous = false;
-  recognition.interimResults = false;
+  // Use a function to create the recognition object to avoid issues during server-side rendering
+  const createRecognition = () => {
+    if (typeof window !== 'undefined') {
+      return new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    }
+    return null;
+  };
+  
+  const recognition = createRecognition();
+  
+  // Initialize speech recognition if available
+  useEffect(() => {
+    if (recognition) {
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      
+      recognition.onresult = (event: any) => {
+        const userMessage = event.results[0][0].transcript;
+        sendMessage(userMessage);
+      };
+      
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+    }
+  }, [recognition]);
 
   // Text to speech function using ElevenLabs
   const speakMessage = async (text: string) => {
@@ -68,22 +91,17 @@ export const useChatBot = () => {
 
   // Speech recognition handlers
   const startListening = () => {
-    setIsListening(true);
-    recognition.start();
+    if (recognition) {
+      setIsListening(true);
+      recognition.start();
+    }
   };
 
   const stopListening = () => {
-    setIsListening(false);
-    recognition.stop();
-  };
-
-  recognition.onresult = (event) => {
-    const userMessage = event.results[0][0].transcript;
-    sendMessage(userMessage);
-  };
-
-  recognition.onend = () => {
-    setIsListening(false);
+    if (recognition) {
+      setIsListening(false);
+      recognition.stop();
+    }
   };
 
   const sendMessage = async (userMessage: string) => {
