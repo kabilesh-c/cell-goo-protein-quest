@@ -515,13 +515,13 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="text-center mt-12">
+          <div className="flex justify-center mt-12">
             <p className="text-xl text-white font-medium mb-4 animate-pulse">
               Wanna test your knowledge on protein synthesis?
             </p>
-            <GooeyButton
-              onClick={handleTakeQuiz}
-            >
+          </div>
+          <div className="flex justify-center">
+            <GooeyButton onClick={handleTakeQuiz}>
               Take Quiz
             </GooeyButton>
           </div>

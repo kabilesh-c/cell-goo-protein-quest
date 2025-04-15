@@ -9,17 +9,17 @@ export interface ChatMessage {
   timestamp: Date;
 }
 
+const ELEVEN_LABS_API_KEY = 'sk_6118cd8f25b74cb67ce6800769d664c35ba55427a0f4d375';
+
 export const useChatBot = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [apiKey, setApiKey] = useState<string>('');
   const { toast } = useToast();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const recognitionRef = useRef<any>(null);
 
   // Speech recognition setup
-  // Create recognition instance only on client side
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -49,7 +49,6 @@ export const useChatBot = () => {
     }
     
     return () => {
-      // Cleanup recognition on unmount
       if (recognitionRef.current) {
         stopListening();
       }
@@ -66,8 +65,6 @@ export const useChatBot = () => {
 
   // Text to speech function using ElevenLabs
   const speakMessage = async (text: string) => {
-    if (!apiKey) return;
-    
     // Stop any previous audio that might be playing
     stopSpeaking();
     
@@ -76,7 +73,7 @@ export const useChatBot = () => {
         method: 'POST',
         headers: {
           'Accept': 'audio/mpeg',
-          'xi-api-key': apiKey,
+          'xi-api-key': ELEVEN_LABS_API_KEY,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -106,15 +103,14 @@ export const useChatBot = () => {
       console.error('Text-to-speech error:', error);
       toast({
         title: "Voice Playback Error",
-        description: "Could not play the voice response. Please check your API key.",
+        description: "Could not play the voice response. Please try again.",
       });
     }
   };
 
-  // Send initial greeting when the chat is first opened and API key is available
+  // Send initial greeting when the chat is first opened
   useEffect(() => {
     const hasInitialGreeting = messages.length > 0;
-    const canSpeak = apiKey && !hasInitialGreeting;
     
     if (!hasInitialGreeting) {
       const greeting = "Hello, I am BioBuddy, and I'm here to assist you. Feel free to ask me anything related to protein synthesis!";
@@ -126,14 +122,9 @@ export const useChatBot = () => {
         },
       ]);
       
-      if (canSpeak) {
-        speakMessage(greeting);
-      }
-    } else if (apiKey && messages.length === 1 && !audioRef.current) {
-      // If API key was added after initial greeting was displayed
-      speakMessage(messages[0].content);
+      speakMessage(greeting);
     }
-  }, [messages.length, apiKey]);
+  }, [messages.length]);
 
   // Speech recognition handlers
   const startListening = () => {
@@ -185,10 +176,7 @@ export const useChatBot = () => {
         },
       ]);
 
-      // Speak the bot's reply if API key is available
-      if (apiKey) {
-        speakMessage(botReply);
-      }
+      speakMessage(botReply);
     } catch (error) {
       console.error('Error getting chatbot response:', error);
       const errorMessage = "I'm sorry, I couldn't process your request at the moment. Please try again later.";
@@ -202,9 +190,7 @@ export const useChatBot = () => {
         },
       ]);
       
-      if (apiKey) {
-        speakMessage(errorMessage);
-      }
+      speakMessage(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -218,7 +204,5 @@ export const useChatBot = () => {
     startListening,
     stopListening,
     stopSpeaking,
-    setApiKey,
-    apiKey,
   };
 };
