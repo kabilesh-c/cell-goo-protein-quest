@@ -32,7 +32,19 @@
               l.pathname.slice(0, -1) + decoded + l.hash
           );
         }
-      }(window.location))
+      }(window.location));
+      
+      // Handle 404s in SPA by redirecting to index.html
+      (function() {
+        // Get the base URL for the site
+        var baseUrl = window.location.origin + '/ProteinOS/';
+        
+        // If we're not at the base path, check if this is a direct page load that needs routing
+        if (window.location.href !== baseUrl && !window.location.href.startsWith(baseUrl + '?') && !window.location.href.startsWith(baseUrl + '#')) {
+          // Store the original URL to pass to the router
+          sessionStorage.setItem('redirectUrl', window.location.pathname.replace('/ProteinOS', ''));
+        }
+      })();
     </script>
     <!-- End Single Page Apps for GitHub Pages -->
   </head>

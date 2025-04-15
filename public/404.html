@@ -3,25 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Not Found</title>
+  <title>Redirecting...</title>
   <script>
-    // Single Page Apps for GitHub Pages
-    // MIT License
-    // https://github.com/rafgraph/spa-github-pages
-    (function(l) {
-      if (l.search[1] === '/' ) {
-        var decoded = l.search.slice(1).split('&').map(function(s) { 
-          return s.replace(/~and~/g, '&')
-        }).join('?');
-        window.history.replaceState(null, null,
-            l.pathname.slice(0, -1) + decoded + l.hash
-        );
-      }
-    }(window.location))
-  </script>
-  <script>
-    // Redirect to index.html to handle routing in the React app
-    window.location.href = window.location.origin + '/ProteinOS/';
+    // Get the current path excluding the 404.html
+    var path = window.location.pathname.replace('/404.html', '');
+    
+    // GitHub Pages serves your site under a path prefix matching the repo name
+    var redirectUrl = '/ProteinOS' + (path.endsWith('/') ? path : path + '/');
+    
+    // Redirect to the correct URL
+    window.location.href = redirectUrl;
   </script>
   <style>
     body {
@@ -64,11 +55,8 @@
 </head>
 <body>
   <div class="container">
-    <h1>Page Not Found</h1>
-    <p>We're redirecting you to the home page...</p>
-    <noscript>
-      <p>It looks like you have JavaScript disabled. Please <a href="/ProteinOS/">click here</a> to go to the home page.</p>
-    </noscript>
+    <h1>Redirecting...</h1>
+    <p>If you are not redirected automatically, please <a href="https://kabilesh-c.github.io/ProteinOS/">click here</a>.</p>
   </div>
 </body>
 </html> 
