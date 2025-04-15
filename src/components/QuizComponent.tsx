@@ -1,11 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import { proteinSynthesisQuestions } from '@/lib/quiz-data';
 import { CheckCircle, XCircle, Home, RotateCcw, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
-import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
 
 const QuizComponent = () => {
@@ -34,9 +32,6 @@ const QuizComponent = () => {
 
     if (optionIndex === currentQuestion.correctOptionIndex) {
       setCorrectAnswers(prev => prev + 1);
-      toast.success("That's correct! Well done!");
-    } else {
-      toast.error("Oh no! That's not the right answer.");
     }
   };
 

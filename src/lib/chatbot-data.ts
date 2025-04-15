@@ -1,4 +1,3 @@
-
 interface ChatbotData {
   [key: string]: string[];
 }
@@ -36,6 +35,30 @@ const proteinSynthesisData: ChatbotData = {
   'codon': [
     "Codons are three-nucleotide sequences in mRNA that specify either an amino acid or a stop signal during translation. There are 64 possible codons in the genetic code, coding for 20 amino acids and stop signals.",
     "The genetic code is degenerate, meaning multiple codons can specify the same amino acid. The start codon (AUG) signals the beginning of protein synthesis and codes for methionine. Three stop codons (UAA, UAG, UGA) signal the end of translation."
+  ],
+  'proteinos': [
+    "ProteinOS is an educational platform designed to make learning about protein synthesis intuitive and interactive. Our goal is to transform complex biological processes into engaging visual experiences that help students and enthusiasts understand the fundamental mechanisms of life.",
+    "ProteinOS was created to bridge the gap between traditional textbook learning and modern interactive education. We visualize the intricate processes of transcription, translation, and protein folding to help users gain a deeper appreciation of molecular biology."
+  ],
+  'purpose': [
+    "The purpose of ProteinOS is to democratize knowledge about protein synthesis through interactive visualizations and engaging content. We aim to make complex biological concepts accessible to students, educators, and anyone curious about how life works at the molecular level.",
+    "Our mission with ProteinOS is to inspire the next generation of scientists by making molecular biology more approachable and exciting. By visualizing these invisible cellular processes, we hope to ignite curiosity and deeper understanding of the building blocks of life."
+  ],
+  'folding': [
+    "Protein folding is the process by which a linear chain of amino acids acquires its three-dimensional structure. This structure is essential for proper function, as it determines how the protein interacts with other molecules in the cell.",
+    "Protein folding is guided by hydrophobic interactions, hydrogen bonds, ionic interactions, and disulfide bridges. Chaperone proteins assist in the folding process, ensuring proteins achieve their correct conformation and preventing misfolding that can lead to diseases."
+  ],
+  'aim': [
+    "The aim of ProteinOS is to make protein synthesis education more accessible, interactive, and engaging. We believe that complex biological processes are best understood through dynamic visualization rather than static textbook images.",
+    "Our aim with ProteinOS is to transform how people learn about molecular biology by providing interactive models that accurately represent the dynamic nature of protein synthesis, making these microscopic processes tangible and understandable."
+  ],
+  'website': [
+    "This website was built to revolutionize how people learn about protein synthesis by providing interactive visualizations of molecular biology concepts that are traditionally difficult to grasp from textbooks alone.",
+    "ProteinOS website combines beautiful visuals with scientific accuracy to create an immersive learning experience about protein synthesis, making these invisible cellular processes visible and understandable."
+  ],
+  'quiz': [
+    "The quiz feature on ProteinOS helps test your knowledge of protein synthesis concepts in an interactive way. It's designed to reinforce your learning and identify areas where you might need additional study.",
+    "Taking our quiz is a great way to check your understanding of the protein synthesis process after exploring our interactive modules. It covers key concepts from transcription and translation to protein folding."
   ]
 };
 
@@ -58,6 +81,11 @@ export const chatbotResponse = async (userInput: string): Promise<string> => {
     return "Protein synthesis is the process by which cells build proteins. It occurs in two main stages: transcription (DNA → mRNA) and translation (mRNA → protein). This process is part of the Central Dogma of molecular biology, which describes the flow of genetic information from DNA to RNA to proteins.";
   }
   
+  // Handle questions about the website's purpose
+  if (input.includes('why') || input.includes('about') || input.includes('goal') || input.includes('learn')) {
+    return "ProteinOS was created to make learning about protein synthesis engaging and interactive. Our goal is to transform complex biological concepts into visual experiences that are easy to understand. We believe that by seeing these processes in action, you can gain a deeper appreciation for the amazing molecular machinery that powers all life.";
+  }
+  
   // For unrecognized questions
-  return "I'm not sure about that specific topic. You can ask me about transcription, translation, mRNA, ribosomes, tRNA, codons, DNA's role in protein synthesis, or post-translational modifications. What would you like to know?";
+  return "I'm your guide to protein synthesis and ProteinOS! You can ask me about specific topics like transcription, translation, mRNA, ribosomes, or about why we created this website. How can I help you learn about the fascinating world of proteins?";
 };

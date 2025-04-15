@@ -1,73 +1,88 @@
-# Welcome to your Lovable project
+# ProteinOS
 
-## Project info
+An interactive educational platform for learning about protein synthesis through immersive visualizations and engaging content.
 
-**URL**: https://lovable.dev/projects/450fa4ff-8061-4212-9026-7715b0c10590
+![ProteinOS Preview](/src/assets/protein-og-image.png)
 
-## How can I edit this code?
+## About the Project
 
-There are several ways of editing your application.
+ProteinOS is designed to make learning about protein synthesis intuitive and engaging. By visualizing complex molecular processes, we aim to help students and educators better understand the fundamental mechanisms of life.
 
-**Use Lovable**
+The website covers:
+- Transcription (DNA to mRNA)
+- Translation (mRNA to protein)
+- Protein Folding & Function
+- Interactive 3D models of molecular structures
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/450fa4ff-8061-4212-9026-7715b0c10590) and start prompting.
+## Features
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Interactive Visualizations**: Explore the protein synthesis process through dynamic 3D models
+- **Step-by-Step Learning**: Follow the journey from DNA to functional proteins
+- **Knowledge Assessment**: Test your understanding with an interactive quiz
+- **AI Chatbot Assistant**: Get answers to your protein synthesis questions
+- **Educational Video Resources**: Curated collection of relevant educational videos
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
+## Technologies Used
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Frontend**: React, TypeScript, Vite
+- **UI Framework**: Tailwind CSS, shadcn/ui
+- **Animations**: Framer Motion
+- **3D Visualization**: Three.js
+- **Chatbot**: Custom AI implementation
 
-## How can I deploy this project?
+## Getting Started
 
-Simply open [Lovable](https://lovable.dev/projects/450fa4ff-8061-4212-9026-7715b0c10590) and click on Share -> Publish.
+### Prerequisites
 
-## Can I connect a custom domain to my Lovable project?
+- Node.js (v16+)
+- npm or yarn
 
-Yes it is!
+### Installation
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```sh
+# Clone the repository
+git clone https://github.com/yourusername/ProteinOS.git
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+# Navigate to the project directory
+cd ProteinOS
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+Visit `http://localhost:8080` to view the application.
+
+## Project Structure
+
+```
+src/
+├── components/      # Reusable UI components
+├── pages/           # Main application pages
+├── hooks/           # Custom React hooks
+├── lib/             # Utility functions
+├── assets/          # Static assets
+└── styles/          # Global styles
+```
+
+## Deployment
+
+This project can be deployed to any static hosting service such as Vercel, Netlify, or GitHub Pages.
+
+## Contributing
+
+Contributions are welcome! Feel free to submit a pull request or open an issue.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+Developed by Kabilesh C
+
+Special thanks to all the educators and scientific resources that made this educational tool possible.

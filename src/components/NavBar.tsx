@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
@@ -78,7 +77,7 @@ const NavBar: React.FC<NavBarProps> = ({ activeSection, onSectionChange }) => {
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center">
-          <span className="text-xl font-bold text-primary mr-2">POS</span>
+          <span className="text-xl font-bold text-primary mr-2">PS</span>
           <span className="hidden sm:inline-block text-white font-semibold">
             ProteinOS
           </span>

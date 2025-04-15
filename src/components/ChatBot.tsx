@@ -1,18 +1,16 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, X, Send, Mic, MicOff, Minimize2, Maximize2, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useChatBot } from '@/hooks/use-chatbot';
+import useChatBot from '@/hooks/use-chatbot';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [message, setMessage] = useState('');
-  const [isMuted, setIsMuted] = useState(false);
   
   const { 
     messages, 
@@ -22,7 +20,9 @@ const ChatBot: React.FC = () => {
     startListening, 
     stopListening, 
     stopSpeaking,
-    isSpeaking
+    isSpeaking,
+    isMuted,
+    setIsMuted
   } = useChatBot();
   
   const inputRef = useRef<HTMLInputElement>(null);
@@ -40,12 +40,21 @@ const ChatBot: React.FC = () => {
 
   // Auto-open the chatbot on page load after a short delay
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, 1500);
-    
-    return () => clearTimeout(timer);
+    // Removing the auto-open functionality
+    // The chatbot will now remain closed until user clicks the button
+    return () => {};
   }, []);
+
+  // Effect to handle muted state
+  useEffect(() => {
+    if (isMuted) {
+      stopSpeaking();
+      // Also cancel any browser speech synthesis if running
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+  }, [isMuted, stopSpeaking]);
 
   const handleSend = () => {
     if (message.trim()) {
@@ -75,9 +84,20 @@ const ChatBot: React.FC = () => {
   const handleVoiceControl = () => {
     if (!isMuted) {
       stopSpeaking();
+      // Also cancel any browser speech synthesis if running
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
       setIsMuted(true);
     } else {
       setIsMuted(false);
+      // Play a brief confirmation sound to indicate voice is enabled
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance("Voice enabled");
+        utterance.volume = 0.8;
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
     }
   };
 
@@ -89,14 +109,17 @@ const ChatBot: React.FC = () => {
         animate={{ scale: 1 }}
         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
       >
-        <Button
-          onClick={toggleChat}
-          className="h-14 w-14 rounded-full bg-gradient-to-br from-primary to-secondary shadow-lg hover:shadow-xl transition-all duration-300"
-          aria-label="Open chat with BioBuddy"
-        >
-          <Bot className="h-6 w-6 text-white" />
-          <span className="sr-only">Chat with BioBuddy</span>
-        </Button>
+        <div className="relative">
+          <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping-slow"></div>
+          <Button
+            onClick={toggleChat}
+            className="h-16 w-16 rounded-full bg-gradient-to-br from-primary to-secondary shadow-lg hover:shadow-xl transition-all duration-300 animate-pulse-slow relative"
+            aria-label="Open chat with BioBuddy"
+          >
+            <Bot className="h-8 w-8 text-white" />
+            <span className="sr-only">Chat with BioBuddy</span>
+          </Button>
+        </div>
       </motion.div>
 
       <AnimatePresence>
@@ -118,7 +141,13 @@ const ChatBot: React.FC = () => {
               ) : (
                 <div className="flex items-center space-x-2">
                   <Bot className="h-5 w-5" />
-                  <h3 className="font-orbitron tracking-wide">BioBuddy Assistant</h3>
+                  <div>
+                    <h3 className="font-orbitron tracking-wide">BioBuddy Assistant</h3>
+                    <div className="flex items-center text-xs opacity-80 mt-0.5">
+                      <span className={`inline-block h-1.5 w-1.5 rounded-full mr-1.5 ${isMuted ? 'bg-orange-300' : 'bg-green-300'}`}></span>
+                      <span>{isMuted ? 'Voice disabled' : 'Voice enabled'}</span>
+                    </div>
+                  </div>
                 </div>
               )}
               <div className="flex items-center gap-2">
@@ -128,14 +157,20 @@ const ChatBot: React.FC = () => {
                       <Button 
                         variant="ghost" 
                         size="icon" 
-                        className="h-6 w-6 text-white hover:bg-white/20 rounded-full"
+                        className={`h-6 w-6 text-white hover:bg-white/20 rounded-full ${isMuted ? 'bg-white/10' : ''}`}
                         onClick={handleVoiceControl}
+                        aria-label={isMuted ? 'Unmute voice' : 'Mute voice'}
+                        aria-pressed={!isMuted}
                       >
-                        {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                        {isMuted ? (
+                          <VolumeX className="h-4 w-4 opacity-70" />
+                        ) : (
+                          <Volume2 className="h-4 w-4" />
+                        )}
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{isMuted ? 'Unmute voice' : 'Mute voice'}</p>
+                    <TooltipContent side="bottom">
+                      <p className="text-xs">{isMuted ? 'Unmute voice' : 'Mute voice'}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -229,17 +264,17 @@ const ChatBot: React.FC = () => {
                           variant="outline"
                           onClick={isListening ? stopListening : startListening}
                           disabled={isLoading}
-                          className={isListening ? 'bg-red-500 hover:bg-red-600 text-white' : ''}
+                          className={`${isListening ? 'bg-muted border-primary/50' : ''}`}
                         >
                           {isListening ? (
-                            <MicOff className="h-4 w-4" />
+                            <MicOff className="h-4 w-4 text-primary" />
                           ) : (
                             <Mic className="h-4 w-4" />
                           )}
                         </Button>
                       </TooltipTrigger>
-                      <TooltipContent>
-                        <p>{isListening ? 'Stop Voice Input' : 'Start Voice Input'}</p>
+                      <TooltipContent side="bottom">
+                        <p className="text-xs">{isListening ? 'Stop Voice Input' : 'Start Voice Input'}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>

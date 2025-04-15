@@ -36,7 +36,10 @@ const Index = () => {
           }
         });
       },
-      { threshold: 0.5 }
+      { 
+        threshold: 0.1,
+        rootMargin: '-50px 0px -50px 0px'
+      }
     );
     
     Object.values(sections).forEach((ref) => {
@@ -56,10 +59,6 @@ const Index = () => {
   
   const handleStartLearning = () => {
     sections.introduction.current?.scrollIntoView({ behavior: 'smooth' });
-    toast({
-      title: "Let's learn about Protein Synthesis!",
-      description: "Scroll through the sections to learn step by step.",
-    });
   };
   
   const handleTakeQuiz = () => {
@@ -463,10 +462,10 @@ const Index = () => {
             />
             
             <VideoCard 
-              title="Translation: mRNA to protein"
-              channelName="Khan Academy"
-              thumbnailUrl="https://i3.ytimg.com/vi/qNXgzZ2y0B4/maxresdefault.jpg"
-              videoUrl="https://www.youtube.com/watch?v=qNXgzZ2y0B4"
+              title="Translation (mRNA to protein) | Biomolecules"
+              channelName="Khan Academy MCAT"
+              thumbnailUrl="https://i3.ytimg.com/vi/ocAAkB32Hqs/maxresdefault.jpg"
+              videoUrl="https://www.youtube.com/watch?v=ocAAkB32Hqs"
             />
             
             <VideoCard 
@@ -477,10 +476,10 @@ const Index = () => {
             />
             
             <VideoCard 
-              title="Protein Folding"
-              channelName="HHMI BioInteractive"
-              thumbnailUrl="https://i3.ytimg.com/vi/wl1HwGibJ_A/maxresdefault.jpg"
-              videoUrl="https://www.youtube.com/watch?v=wl1HwGibJ_A"
+              title="What is Protein Folding and Misfolding?"
+              channelName="iBiology"
+              thumbnailUrl="https://i3.ytimg.com/vi/cDR1iKM78oY/maxresdefault.jpg"
+              videoUrl="https://www.youtube.com/watch?v=cDR1iKM78oY"
             />
             
             <VideoCard 
@@ -515,37 +514,21 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="flex justify-center mt-12">
-            <p className="text-xl text-white font-medium mb-4 animate-pulse">
-              Wanna test your knowledge on protein synthesis?
-            </p>
-          </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-24">
             <GooeyButton onClick={handleTakeQuiz}>
               Take Quiz
             </GooeyButton>
           </div>
         </div>
       </div>
-      
-      <footer className="mt-24 py-8 border-t border-muted/30">
-        <div className="container mx-auto px-4">
-          <p className="text-center text-muted-foreground">
-            Made with 💚 for Biology Project | Educational Purpose Only
-          </p>
-          <p className="text-center text-muted-foreground text-sm mt-2">
-            © {new Date().getFullYear()} | All animations and content created with Lovable AI
-          </p>
-        </div>
-      </footer>
     </section>
   );
   
   return (
-    <div className="relative bg-background min-h-screen">
+    <div className="relative bg-background min-h-screen flex flex-col">
       <NavBar activeSection={activeSection} onSectionChange={setActiveSection} />
       
-      <main>
+      <main className="flex-grow">
         {renderHeroSection()}
         {renderIntroductionSection()}
         {renderTranscriptionSection()}
@@ -553,6 +536,17 @@ const Index = () => {
         {renderFoldingSection()}
         {renderVideosSection()}
       </main>
+
+      <footer className="mt-auto py-4 border-t border-muted/30">
+        <div className="container mx-auto px-4 flex flex-col items-center justify-center">
+          <p className="text-primary text-center text-sm">
+            Assembled codon by codon by Kabilesh C 🔧🧬
+          </p>
+          <p className="text-primary text-xs mt-1 text-center">
+            © 2025 ProteinOS All Rights Reserved
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
