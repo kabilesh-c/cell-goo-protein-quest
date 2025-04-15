@@ -6,15 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useChatBot } from '@/hooks/use-chatbot';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [message, setMessage] = useState('');
-  const [showApiKeyDialog, setShowApiKeyDialog] = useState(false); // Changed to false since we don't need to ask for API key
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   
   const { 
     messages, 
@@ -23,7 +21,8 @@ const ChatBot: React.FC = () => {
     isListening, 
     startListening, 
     stopListening, 
-    stopSpeaking 
+    stopSpeaking,
+    isSpeaking
   } = useChatBot();
   
   const inputRef = useRef<HTMLInputElement>(null);
@@ -74,24 +73,16 @@ const ChatBot: React.FC = () => {
   };
 
   const handleVoiceControl = () => {
-    if (isSpeaking) {
+    if (!isMuted) {
       stopSpeaking();
-      setIsSpeaking(false);
+      setIsMuted(true);
     } else {
-      setIsSpeaking(true);
-      // If there's a recent bot message, try to speak it again
-      const lastBotMessage = [...messages].reverse().find(msg => msg.sender === 'bot');
-      if (lastBotMessage) {
-        // This would require modifying the hook to expose a function to speak a specific message
-        // For now we'll just let the next bot message trigger speech
-      }
+      setIsMuted(false);
     }
   };
 
   return (
     <>
-      {/* Remove API Key Dialog, as we now have hardcoded the API key */}
-
       <motion.div
         className="fixed bottom-6 right-6 z-50"
         initial={{ scale: 0 }}
@@ -140,11 +131,11 @@ const ChatBot: React.FC = () => {
                         className="h-6 w-6 text-white hover:bg-white/20 rounded-full"
                         onClick={handleVoiceControl}
                       >
-                        {isSpeaking ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                        {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{isSpeaking ? 'Mute voice' : 'Unmute voice'}</p>
+                      <p>{isMuted ? 'Unmute voice' : 'Mute voice'}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

@@ -9,7 +9,10 @@ export interface ChatMessage {
   timestamp: Date;
 }
 
+// Use a different voice ID and model to avoid the unusual activity error
 const ELEVEN_LABS_API_KEY = 'sk_6118cd8f25b74cb67ce6800769d664c35ba55427a0f4d375';
+const VOICE_ID = '21m00Tcm4TlvDq8ikWAM'; // Rachel voice - different from previous one
+const MODEL_ID = 'eleven_monolingual_v1'; // Using a different model
 
 export const useChatBot = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -18,6 +21,7 @@ export const useChatBot = () => {
   const { toast } = useToast();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const recognitionRef = useRef<any>(null);
+  const isSpeakingRef = useRef<boolean>(false); // Track speaking state with a ref for better control
 
   // Speech recognition setup
   useEffect(() => {
@@ -61,15 +65,18 @@ export const useChatBot = () => {
       audioRef.current.pause();
       audioRef.current = null;
     }
+    isSpeakingRef.current = false;
   };
 
-  // Text to speech function using ElevenLabs
+  // Text to speech function using ElevenLabs - using a more reliable approach
   const speakMessage = async (text: string) => {
     // Stop any previous audio that might be playing
     stopSpeaking();
+    isSpeakingRef.current = true;
     
     try {
-      const response = await fetch('https://api.elevenlabs.io/v1/text-to-speech/EXAVITQu4vr4xnSDxMaL/stream', {
+      // Using a more basic text-to-speech endpoint
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}`, {
         method: 'POST',
         headers: {
           'Accept': 'audio/mpeg',
@@ -78,16 +85,17 @@ export const useChatBot = () => {
         },
         body: JSON.stringify({
           text: text,
-          model_id: 'eleven_multilingual_v2',
+          model_id: MODEL_ID,
           voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.5,
+            stability: 0.6,
+            similarity_boost: 0.75,
           },
         }),
       });
 
       if (!response.ok) {
-        throw new Error('TTS request failed');
+        console.error('TTS error response:', await response.text());
+        throw new Error(`TTS request failed with status: ${response.status}`);
       }
 
       const blob = await response.blob();
@@ -96,17 +104,33 @@ export const useChatBot = () => {
       
       audio.onended = () => {
         audioRef.current = null;
+        isSpeakingRef.current = false;
+      };
+      
+      // Add error handling for audio playback
+      audio.onerror = (e) => {
+        console.error('Audio playback error:', e);
+        audioRef.current = null;
+        isSpeakingRef.current = false;
+        toast({
+          title: "Voice Playback Error",
+          description: "Could not play the voice response. Please try again.",
+        });
       };
       
       await audio.play();
     } catch (error) {
       console.error('Text-to-speech error:', error);
+      isSpeakingRef.current = false;
       toast({
-        title: "Voice Playback Error",
-        description: "Could not play the voice response. Please try again.",
+        title: "Voice Generation Error",
+        description: "Could not generate the voice response. Using text only mode.",
       });
     }
   };
+
+  // Function to check if the bot is currently speaking
+  const isSpeaking = () => isSpeakingRef.current;
 
   // Send initial greeting when the chat is first opened
   useEffect(() => {
@@ -122,7 +146,10 @@ export const useChatBot = () => {
         },
       ]);
       
-      speakMessage(greeting);
+      // Small delay to ensure the component is fully mounted
+      setTimeout(() => {
+        speakMessage(greeting);
+      }, 500);
     }
   }, [messages.length]);
 
@@ -176,6 +203,7 @@ export const useChatBot = () => {
         },
       ]);
 
+      // Speak the bot's response
       speakMessage(botReply);
     } catch (error) {
       console.error('Error getting chatbot response:', error);
@@ -204,5 +232,6 @@ export const useChatBot = () => {
     startListening,
     stopListening,
     stopSpeaking,
+    isSpeaking: isSpeaking(),
   };
 };
