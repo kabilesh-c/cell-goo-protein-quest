@@ -2,7 +2,7 @@
 
 An interactive educational platform for learning about protein synthesis through immersive visualizations and engaging content.
 
-![ProteinOS Preview](/src/assets/protein-og-image.png)
+[Live Demo](https://kabilesh-c.github.io/ProteinOS)
 
 ## About the Project
 
