@@ -1,27 +1,25 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, X, Send, MessageSquare, Minimize2, Maximize2 } from 'lucide-react';
+import { Bot, X, Send, Mic, MicOff, Minimize2, Maximize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Tooltip } from '@/components/ui/tooltip';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useChatBot } from '@/hooks/use-chatbot';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [message, setMessage] = useState('');
-  const { messages, sendMessage, isLoading } = useChatBot();
+  const [showApiKeyDialog, setShowApiKeyDialog] = useState(true);
+  const { messages, sendMessage, isLoading, isListening, startListening, stopListening, setApiKey, apiKey } = useChatBot();
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Focus input when chat opens
   useEffect(() => {
     if (isOpen && !isMinimized) {
       inputRef.current?.focus();
@@ -55,7 +53,22 @@ const ChatBot: React.FC = () => {
 
   return (
     <>
-      {/* Chat Button */}
+      <Dialog open={showApiKeyDialog && !apiKey} onOpenChange={setShowApiKeyDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Enter ElevenLabs API Key</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Input
+              type="password"
+              placeholder="Enter your ElevenLabs API key"
+              onChange={(e) => setApiKey(e.target.value)}
+            />
+            <Button onClick={() => setShowApiKeyDialog(false)}>Save</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <motion.div
         className="fixed bottom-6 right-6 z-50"
         initial={{ scale: 0 }}
@@ -72,7 +85,6 @@ const ChatBot: React.FC = () => {
         </Button>
       </motion.div>
 
-      {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -83,7 +95,6 @@ const ChatBot: React.FC = () => {
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Chat Header */}
             <div className="p-4 bg-gradient-to-r from-primary to-secondary text-white flex items-center justify-between">
               {isMinimized ? (
                 <div className="flex items-center space-x-2">
@@ -120,7 +131,6 @@ const ChatBot: React.FC = () => {
 
             {!isMinimized && (
               <>
-                {/* Chat Messages */}
                 <ScrollArea className="flex-1 p-4">
                   <div className="space-y-4">
                     {messages.map((msg, index) => (
@@ -152,7 +162,6 @@ const ChatBot: React.FC = () => {
                   </div>
                 </ScrollArea>
 
-                {/* Chat Input */}
                 <div className="p-4 border-t border-border flex items-center gap-2">
                   <Input
                     ref={inputRef}
@@ -161,8 +170,24 @@ const ChatBot: React.FC = () => {
                     onKeyDown={handleKeyDown}
                     placeholder="Ask about protein synthesis..."
                     className="flex-1"
-                    disabled={isLoading}
+                    disabled={isLoading || isListening}
                   />
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={isListening ? stopListening : startListening}
+                    disabled={isLoading}
+                    className={isListening ? 'bg-red-500 hover:bg-red-600' : ''}
+                  >
+                    {isListening ? (
+                      <MicOff className="h-4 w-4" />
+                    ) : (
+                      <Mic className="h-4 w-4" />
+                    )}
+                    <span className="sr-only">
+                      {isListening ? 'Stop Recording' : 'Start Recording'}
+                    </span>
+                  </Button>
                   <Button
                     onClick={handleSend}
                     size="icon" 
