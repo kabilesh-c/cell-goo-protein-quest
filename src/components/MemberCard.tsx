@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from '@/lib/utils';
-import { Dna, Microscope, Sun, Waves, Sparkles } from 'lucide-react';
+import { Dna, Microscope, Sun, Sparkles } from 'lucide-react';
 
 interface MemberCardProps {
   memberNumber: number;
@@ -11,10 +11,10 @@ interface MemberCardProps {
   className?: string;
 }
 
-// Map member numbers to icons
+// Map member numbers to icons - using only icons that are confirmed to exist
 const memberIcons = [
   <Dna className="h-6 w-6 text-primary" />,
-  <Waves className="h-6 w-6 text-secondary" />,
+  <Sparkles className="h-6 w-6 text-secondary" />,
   <Dna className="h-6 w-6 text-primary" />,
   <Sparkles className="h-6 w-6 text-accent" />,
   <Sun className="h-6 w-6 text-yellow-400" />,

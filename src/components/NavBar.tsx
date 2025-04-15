@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface NavBarProps {
   activeSection: string;
@@ -11,6 +12,9 @@ interface NavBarProps {
 const NavBar: React.FC<NavBarProps> = ({ activeSection, onSectionChange }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
 
   const navItems = [
     { id: 'hero', label: 'Home' },
@@ -35,17 +39,32 @@ const NavBar: React.FC<NavBarProps> = ({ activeSection, onSectionChange }) => {
   const handleNavClick = (item: typeof navItems[0]) => {
     if (item.isExternalPage) {
       // Navigate to external page
-      window.location.href = item.path;
+      navigate(item.path);
     } else {
-      // Navigate to section
-      onSectionChange(item.id);
-      setIsMobileMenuOpen(false);
-      
-      const element = document.getElementById(item.id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+      // If we're not on the homepage and trying to navigate to a section
+      // First navigate to homepage then scroll to section
+      if (!isHomePage) {
+        navigate('/');
+        // We need to wait for navigation to complete before scrolling
+        setTimeout(() => {
+          const element = document.getElementById(item.id);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+          onSectionChange(item.id);
+        }, 100);
+      } else {
+        // Already on homepage, just scroll to section
+        onSectionChange(item.id);
+        const element = document.getElementById(item.id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     }
+    
+    // Close mobile menu after navigation
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -73,7 +92,7 @@ const NavBar: React.FC<NavBarProps> = ({ activeSection, onSectionChange }) => {
               onClick={() => handleNavClick(item)}
               className={cn(
                 'nav-link',
-                (activeSection === item.id || (window.location.pathname === item.path && item.isExternalPage)) && 'active'
+                (activeSection === item.id || (location.pathname === item.path && item.isExternalPage)) && 'active'
               )}
             >
               {item.label}
@@ -104,7 +123,7 @@ const NavBar: React.FC<NavBarProps> = ({ activeSection, onSectionChange }) => {
                 onClick={() => handleNavClick(item)}
                 className={cn(
                   'py-2 px-4 text-left rounded-md transition-colors',
-                  (activeSection === item.id || (window.location.pathname === item.path && item.isExternalPage))
+                  (activeSection === item.id || (location.pathname === item.path && item.isExternalPage))
                     ? 'bg-primary/20 text-white'
                     : 'text-muted-foreground hover:bg-primary/10 hover:text-white'
                 )}
