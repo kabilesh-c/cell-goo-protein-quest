@@ -1,18 +1,33 @@
+
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, X, Send, Mic, MicOff, Minimize2, Maximize2 } from 'lucide-react';
+import { Bot, X, Send, Mic, MicOff, Minimize2, Maximize2, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useChatBot } from '@/hooks/use-chatbot';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [message, setMessage] = useState('');
   const [showApiKeyDialog, setShowApiKeyDialog] = useState(true);
-  const { messages, sendMessage, isLoading, isListening, startListening, stopListening, setApiKey, apiKey } = useChatBot();
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  
+  const { 
+    messages, 
+    sendMessage, 
+    isLoading, 
+    isListening, 
+    startListening, 
+    stopListening, 
+    stopSpeaking,
+    setApiKey, 
+    apiKey 
+  } = useChatBot();
+  
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -25,6 +40,15 @@ const ChatBot: React.FC = () => {
       inputRef.current?.focus();
     }
   }, [isOpen, isMinimized]);
+
+  // Auto-open the chatbot on page load after a short delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 1500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSend = () => {
     if (message.trim()) {
@@ -51,6 +75,21 @@ const ChatBot: React.FC = () => {
     setIsMinimized(!isMinimized);
   };
 
+  const handleVoiceControl = () => {
+    if (isSpeaking) {
+      stopSpeaking();
+      setIsSpeaking(false);
+    } else {
+      setIsSpeaking(true);
+      // If there's a recent bot message, try to speak it again
+      const lastBotMessage = [...messages].reverse().find(msg => msg.sender === 'bot');
+      if (lastBotMessage && apiKey) {
+        // This would require modifying the hook to expose a function to speak a specific message
+        // For now we'll just let the next bot message trigger speech
+      }
+    }
+  };
+
   return (
     <>
       <Dialog open={showApiKeyDialog && !apiKey} onOpenChange={setShowApiKeyDialog}>
@@ -59,6 +98,10 @@ const ChatBot: React.FC = () => {
             <DialogTitle>Enter ElevenLabs API Key</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              To enable voice features, please enter your ElevenLabs API key.
+              You can get a free API key from <a href="https://elevenlabs.io/" target="_blank" rel="noopener noreferrer" className="text-primary underline">ElevenLabs</a>.
+            </p>
             <Input
               type="password"
               placeholder="Enter your ElevenLabs API key"
@@ -108,24 +151,60 @@ const ChatBot: React.FC = () => {
                 </div>
               )}
               <div className="flex items-center gap-2">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-6 w-6 text-white hover:bg-white/20 rounded-full"
-                  onClick={toggleMinimize}
-                >
-                  {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
-                  <span className="sr-only">{isMinimized ? 'Maximize' : 'Minimize'}</span>
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-6 w-6 text-white hover:bg-white/20 rounded-full"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <X className="h-4 w-4" />
-                  <span className="sr-only">Close</span>
-                </Button>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6 text-white hover:bg-white/20 rounded-full"
+                        onClick={handleVoiceControl}
+                        disabled={!apiKey}
+                      >
+                        {isSpeaking ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{isSpeaking ? 'Mute voice' : 'Unmute voice'}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6 text-white hover:bg-white/20 rounded-full"
+                        onClick={toggleMinimize}
+                      >
+                        {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{isMinimized ? 'Maximize' : 'Minimize'}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6 text-white hover:bg-white/20 rounded-full"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Close</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
 
@@ -172,22 +251,29 @@ const ChatBot: React.FC = () => {
                     className="flex-1"
                     disabled={isLoading || isListening}
                   />
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    onClick={isListening ? stopListening : startListening}
-                    disabled={isLoading}
-                    className={isListening ? 'bg-red-500 hover:bg-red-600' : ''}
-                  >
-                    {isListening ? (
-                      <MicOff className="h-4 w-4" />
-                    ) : (
-                      <Mic className="h-4 w-4" />
-                    )}
-                    <span className="sr-only">
-                      {isListening ? 'Stop Recording' : 'Start Recording'}
-                    </span>
-                  </Button>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          onClick={isListening ? stopListening : startListening}
+                          disabled={isLoading || !apiKey}
+                          className={isListening ? 'bg-red-500 hover:bg-red-600 text-white' : ''}
+                        >
+                          {isListening ? (
+                            <MicOff className="h-4 w-4" />
+                          ) : (
+                            <Mic className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{isListening ? 'Stop Voice Input' : 'Start Voice Input'}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  
                   <Button
                     onClick={handleSend}
                     size="icon" 
