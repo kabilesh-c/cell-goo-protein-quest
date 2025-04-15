@@ -13,7 +13,7 @@ const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [message, setMessage] = useState('');
-  const [showApiKeyDialog, setShowApiKeyDialog] = useState(true);
+  const [showApiKeyDialog, setShowApiKeyDialog] = useState(false); // Changed to false since we don't need to ask for API key
   const [isSpeaking, setIsSpeaking] = useState(false);
   
   const { 
@@ -23,9 +23,7 @@ const ChatBot: React.FC = () => {
     isListening, 
     startListening, 
     stopListening, 
-    stopSpeaking,
-    setApiKey, 
-    apiKey 
+    stopSpeaking 
   } = useChatBot();
   
   const inputRef = useRef<HTMLInputElement>(null);
@@ -83,7 +81,7 @@ const ChatBot: React.FC = () => {
       setIsSpeaking(true);
       // If there's a recent bot message, try to speak it again
       const lastBotMessage = [...messages].reverse().find(msg => msg.sender === 'bot');
-      if (lastBotMessage && apiKey) {
+      if (lastBotMessage) {
         // This would require modifying the hook to expose a function to speak a specific message
         // For now we'll just let the next bot message trigger speech
       }
@@ -92,25 +90,7 @@ const ChatBot: React.FC = () => {
 
   return (
     <>
-      <Dialog open={showApiKeyDialog && !apiKey} onOpenChange={setShowApiKeyDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Enter ElevenLabs API Key</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              To enable voice features, please enter your ElevenLabs API key.
-              You can get a free API key from <a href="https://elevenlabs.io/" target="_blank" rel="noopener noreferrer" className="text-primary underline">ElevenLabs</a>.
-            </p>
-            <Input
-              type="password"
-              placeholder="Enter your ElevenLabs API key"
-              onChange={(e) => setApiKey(e.target.value)}
-            />
-            <Button onClick={() => setShowApiKeyDialog(false)}>Save</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* Remove API Key Dialog, as we now have hardcoded the API key */}
 
       <motion.div
         className="fixed bottom-6 right-6 z-50"
@@ -159,7 +139,6 @@ const ChatBot: React.FC = () => {
                         size="icon" 
                         className="h-6 w-6 text-white hover:bg-white/20 rounded-full"
                         onClick={handleVoiceControl}
-                        disabled={!apiKey}
                       >
                         {isSpeaking ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
                       </Button>
@@ -258,7 +237,7 @@ const ChatBot: React.FC = () => {
                           size="icon"
                           variant="outline"
                           onClick={isListening ? stopListening : startListening}
-                          disabled={isLoading || !apiKey}
+                          disabled={isLoading}
                           className={isListening ? 'bg-red-500 hover:bg-red-600 text-white' : ''}
                         >
                           {isListening ? (
