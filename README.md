@@ -2,7 +2,7 @@
 
 An interactive educational platform for learning about protein synthesis through immersive visualizations and engaging content.
 
-[Live Demo](https://kabilesh-c.github.io/ProteinOS)
+[Live Demo](https://proteinos.vercel.app/)
 
 ## About the Project
 
@@ -28,9 +28,10 @@ This project is built with:
 
 - **Frontend**: React, TypeScript, Vite
 - **UI Framework**: Tailwind CSS, shadcn/ui
-- **Animations**: Framer Motion
+- **Animations**: Framer Motion, AOS
 - **3D Visualization**: Three.js
 - **Chatbot**: Custom AI implementation
+- **Deployment**: Vercel
 
 ## Getting Started
 
@@ -43,7 +44,7 @@ This project is built with:
 
 ```sh
 # Clone the repository
-git clone https://github.com/yourusername/ProteinOS.git
+git clone https://github.com/kabilesh-c/ProteinOS.git
 
 # Navigate to the project directory
 cd ProteinOS
@@ -71,7 +72,12 @@ src/
 
 ## Deployment
 
-This project can be deployed to any static hosting service such as Vercel, Netlify, or GitHub Pages.
+This project is deployed on Vercel. You can view the live site at [https://proteinos.vercel.app/](https://proteinos.vercel.app/).
+
+To deploy your own instance:
+1. Fork this repository
+2. Connect it to your Vercel account
+3. Deploy with the default settings
 
 ## Contributing
 
