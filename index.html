@@ -34,15 +34,12 @@
         }
       }(window.location));
       
-      // Handle 404s in SPA by redirecting to index.html
+      // Check for redirected route from 404.html
       (function() {
-        // Get the base URL for the site
-        var baseUrl = window.location.origin + '/ProteinOS/';
-        
-        // If we're not at the base path, check if this is a direct page load that needs routing
-        if (window.location.href !== baseUrl && !window.location.href.startsWith(baseUrl + '?') && !window.location.href.startsWith(baseUrl + '#')) {
-          // Store the original URL to pass to the router
-          sessionStorage.setItem('redirectUrl', window.location.pathname.replace('/ProteinOS', ''));
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
         }
       })();
     </script>
